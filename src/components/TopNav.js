@@ -18,6 +18,9 @@ export const TopNav = () => {
               <Nav.Link as={Link} to="/Category">
                 Category
               </Nav.Link>
+              <Nav.Link as={Link} to="/Product">
+                Product
+              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
