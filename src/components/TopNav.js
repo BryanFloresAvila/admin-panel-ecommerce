@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+
 export const TopNav = () => {
   return (
     <>
@@ -20,6 +21,11 @@ export const TopNav = () => {
               </Nav.Link>
               <Nav.Link as={Link} to="/Product">
                 Product
+              </Nav.Link>
+            </Nav>
+            <Nav className="justify-content-end">
+              <Nav.Link as={Link} to="/Login">
+                Login
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>
