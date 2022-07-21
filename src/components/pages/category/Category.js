@@ -9,6 +9,7 @@ import { Loading } from '../../../components/Loading';
 import { useModal } from '../../../hooks/useModal';
 
 export const Category = () => {
+  console.log('Category has been rendered');
   const [updateList, setUpdateList] = useState(false);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -86,7 +87,7 @@ export const Category = () => {
         </thead>
         <tbody>
           {categories.map((category, index) => (
-            <tr>
+            <tr key={category._id}>
               <th scope="row">{index + 1}</th>
               <td className="text-center">{category.name}</td>
               <td>

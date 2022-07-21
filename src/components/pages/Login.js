@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { useUserUpdate, useUser } from '../../context/UserContext';
+import { useUser } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 export const Login = () => {
-  const { login, logout } = useUserUpdate();
-  const { user } = useUser();
+  const {login, isLogged} = useUser();
+  console.log('Login has been rendered');
+  console.log('IsLogged in Login is: '+isLogged);
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+  const handleSubmit =  (e) => {
     e.preventDefault();
-    login(email, password);
-
-    navigate('/Home');
+    login(email, password)
   };
 
   const [email, setEmail] = useState('');

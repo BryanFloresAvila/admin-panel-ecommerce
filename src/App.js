@@ -1,25 +1,19 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React from 'react';
+import React ,{useEffect}from 'react';
 import { TopNav } from './components/TopNav';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Home } from './components/pages/Home';
-import { Category } from './components/pages/category/Category';
-import { Product } from './components/pages/Product';
-import { Login } from './components/pages/Login';
+import { BrowserRouter } from 'react-router-dom';
 import { Footer } from './components/Footer';
 import { UserProvider } from './context/UserContext';
+import {AppRoute} from './router/AppRoute';
+
 export const App = () => {
+
   return (
     <>
       <UserProvider>
         <BrowserRouter>
           <TopNav />
-          <Routes>
-            <Route path="/Home" element={<Home />} />
-            <Route path="/Category" element={<Category />} />
-            <Route path="/Product" element={<Product />} />
-            <Route path="/Login" element={<Login />} />
-          </Routes>
+          <AppRoute/>
           <Footer />
         </BrowserRouter>
       </UserProvider>

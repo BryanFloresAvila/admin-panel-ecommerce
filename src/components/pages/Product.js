@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getProducts } from '../../helpers/getProducts';
-import { Table, Button, ButtonToolbar, Modal, Form } from 'react-bootstrap';
+import { Table, Button, ButtonToolbar} from 'react-bootstrap';
 export const Product = () => {
   const URL_PUBLIC =
     'https://backend-project-pam-production.up.railway.app/uploads/products/';
@@ -8,7 +8,6 @@ export const Product = () => {
   const [updateList, setUpdateList] = useState(false);
   useEffect(() => {
     getProducts().then((data) => {
-      console.log(data.data);
       setProduct(data.data);
     });
   }, [updateList]);
@@ -18,8 +17,8 @@ export const Product = () => {
         <div className="col">
           <h2>Product List</h2>
         </div>
-        <div className="col" striped hover size="sm">
-          <Button className="d-block mx-auto" variant="primary">
+        <div className="col"  size="sm">
+          <Button className="d-block hover mx-auto" variant="primary">
             Add Product
           </Button>
         </div>
@@ -38,7 +37,7 @@ export const Product = () => {
         </thead>
         <tbody>
           {product.map((item, index) => (
-            <tr>
+            <tr key={item._id}>
               <th className="align-middle" scope="row">
                 {index + 1}
               </th>
