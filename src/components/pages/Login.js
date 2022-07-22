@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { useUser } from '../../context/UserContext';
-import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../store/context/authContext';
+import { login } from '../../store/actions/actions';
+import Spinner from 'react-bootstrap/Spinner';
 export const Login = () => {
-  const {login, isLogged} = useUser();
-  console.log('Login has been rendered');
-  console.log('IsLogged in Login is: '+isLogged);
-  const navigate = useNavigate();
-  const handleSubmit =  (e) => {
-    e.preventDefault();
-    login(email, password)
-  };
-
+  const { state, dispatch } = useAuth();
+  const { loadingLogin } = state;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    login(dispatch, { email, password });
+  };
+
+  if (loadingLogin) {
+    return <Spinner animation="border" variant="primary" />;
+  }
   return (
     <div className="container d-flex flex-column align-items-center pt-5">
       <div className="shadow p-3 mb-5  rounded" style={{ width: '400px' }}>
