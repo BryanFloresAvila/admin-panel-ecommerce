@@ -8,7 +8,7 @@ import { ProtectedRoute } from './ProtectedRoute';
 import { PublicRoute } from './PublicRoute';
 import { useAuth } from '../store/context/authContext';
 import { verifyToken as verifyTokenF } from '../store/actions/actions';
-import Spinner from 'react-bootstrap/Spinner';
+import { Loading } from '../components/Loading';
 
 export const AppRoute = () => {
   const { state, dispatch } = useAuth();
@@ -19,11 +19,18 @@ export const AppRoute = () => {
   }, [dispatch]);
 
   if (loadingVerifyToken) {
-    return <Spinner animation="border" variant="primary" />;
+    return <Loading />;
   }
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/Home"
         element={

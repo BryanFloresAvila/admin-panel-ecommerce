@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getProducts } from '../../helpers/getProducts';
-import { Table, Button, ButtonToolbar} from 'react-bootstrap';
+import { Table, Button, ButtonToolbar } from 'react-bootstrap';
 export const Product = () => {
   const URL_PUBLIC =
     'https://backend-project-pam-production.up.railway.app/uploads/products/';
@@ -12,14 +12,14 @@ export const Product = () => {
     });
   }, [updateList]);
   return (
-    <div className="container ">
+    <div className="container-lg ">
       <div className="row py-3">
         <div className="col">
           <h2>Product List</h2>
         </div>
-        <div className="col"  size="sm">
-          <Button className="d-block hover mx-auto" variant="primary">
-            Add Product
+        <div className="col d-flex justify-content-end">
+          <Button className="d-block" variant="primary">
+            Add Category
           </Button>
         </div>
       </div>

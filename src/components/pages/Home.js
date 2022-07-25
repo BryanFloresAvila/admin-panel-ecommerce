@@ -7,7 +7,7 @@ export const Home = () => {
   console.log('isLogged: ' + isLogged + ' user: ' + user);
   return (
     <div className="container">
-      <h3>Hello {user.name}</h3>
+      <h3 className="text-center">Hello {user.name}</h3>
     </div>
   );
 };

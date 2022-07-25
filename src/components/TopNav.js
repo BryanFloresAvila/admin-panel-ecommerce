@@ -1,10 +1,16 @@
 import React from 'react';
-import { Navbar, Container, Nav } from 'react-bootstrap';
+import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../store/context/authContext';
+import { logout } from '../store/actions/actions';
 export const TopNav = () => {
-  const { state } = useAuth();
-  const { isLogged } = state;
+  const { state, dispatch } = useAuth();
+  const { isLogged, user } = state;
+  const handleLogout = (e) => {
+    e.preventDefault();
+    logout(dispatch);
+  };
+
   return (
     <>
       <Navbar bg="dark" variant="dark" expand="lg">
@@ -33,9 +39,9 @@ export const TopNav = () => {
             </Nav>
             <Nav className="justify-content-end">
               {isLogged ? (
-                <Nav.Link as={Link} to="/Logout">
-                  Logout
-                </Nav.Link>
+                <NavDropdown title={user.name} menuVariant="dark">
+                  <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
+                </NavDropdown>
               ) : (
                 <Nav.Link as={Link} to="/Login">
                   Login

@@ -66,7 +66,7 @@ export const Category = () => {
   }, [updateList]);
 
   return (
-    <div className="container">
+    <div className="container-lg">
       <div className="row py-3">
         <div className="col">
           <h2>Category List</h2>
