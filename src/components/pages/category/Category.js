@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { getCategories } from '../../../helpers/getCategories';
 import { Table, Button, ButtonToolbar } from 'react-bootstrap';
 import sweetAlert from 'sweetalert2';
-import axios from 'axios';
 import { ModalEdit } from './ModalEdit';
 import { ModalAdd } from './ModalAdd';
 import { Loading } from '../../../components/Loading';
 import { useModal } from '../../../hooks/useModal';
-
+import { getCategories,deleteCategory } from '../../../lib/api/services/categories';
 export const Category = () => {
   console.log('Category has been rendered');
   const [updateList, setUpdateList] = useState(false);
@@ -24,7 +22,7 @@ export const Category = () => {
   };
  */
   const handleDelete = (category) => {
-    const URL = 'https://backend-project-pam-production.up.railway.app/api/v1/categories';
+  
     sweetAlert
       .fire({
         title: `Are you sure to delete ${category.name} ?`,
@@ -38,7 +36,7 @@ export const Category = () => {
       })
       .then((result) => {
         if (result.isConfirmed) {
-          axios.delete(`${URL}/${category._id}`).then((response) => {
+          deleteCategory(category._id).then((response) => {
             if (response.status === 200) {
               sweetAlert.fire(
                 'Deleted!',
@@ -59,9 +57,10 @@ export const Category = () => {
   };
 
   useEffect(() => {
-    getCategories().then((data) => {
+    getCategories().then(({data}) => {
+      const { data: categories } = data;
       setLoading(false);
-      setCategories(data.data);
+      setCategories(categories);
     });
   }, [updateList]);
 

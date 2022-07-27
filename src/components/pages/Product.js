@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getProducts } from '../../helpers/getProducts';
+import { getProducts } from '../../utils/getProducts';
 import { Table, Button, ButtonToolbar } from 'react-bootstrap';
 export const Product = () => {
   const URL_PUBLIC =

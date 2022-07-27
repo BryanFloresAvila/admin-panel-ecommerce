@@ -9,7 +9,7 @@ import {
 } from '../actions/type';
 
 import axios from 'axios';
-import { token } from '../../helpers/auth';
+import { token } from '../../utils/auth';
 export const login = (dispatch, loginPayload) => {
   console.log('executing login...');
   const URL = 'https://backend-project-pam-production.up.railway.app/api/v1/auth/login';

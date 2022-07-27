@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import sweetAlert from 'sweetalert2';
-import axios from 'axios';
+import { createCategory } from '../../../lib/api/services/categories';
+
 export const ModalAdd = ({
   showModalAdd,
   handleCloseModalAdd,
@@ -10,28 +11,38 @@ export const ModalAdd = ({
 }) => {
   const handleSubmitAdd = async (e) => {
     e.preventDefault();
-    const URL =
-      'https://backend-project-pam-production.up.railway.app/api/v1/categories/create';
     const data = {
       name: e.target[0].value,
     };
-    const response = await axios.post(URL, data);
-    if (response.status === 200) {
-      setUpdateList(!updateList);
-      handleCloseModalAdd();
-      sweetAlert.fire(
-        'Saved!',
-        `The register ${response.data.reference} has been saved correctly !`,
-        'success'
-      );
-    } else {
+    createCategory(data)
+    .then((response) => {
+      console.log(response);
+      if (response.status === 200) {
+        setUpdateList(!updateList);
+        handleCloseModalAdd();
+        sweetAlert.fire(
+          'Saved!',
+          `The register ${response.data.reference} has been saved correctly !`,
+          'success'
+        );
+      } else {
+        sweetAlert.fire({
+          title: 'Error',
+          text: 'Something went wrong',
+          icon: 'error',
+        });
+      }
+    }).catch((error) => {
+      console.log(error);
       sweetAlert.fire({
         title: 'Error',
         text: 'Something went wrong',
         icon: 'error',
       });
-    }
+    })
   };
+
+
   return (
     <Modal show={showModalAdd} onHide={handleCloseModalAdd}>
       <Modal.Header>
