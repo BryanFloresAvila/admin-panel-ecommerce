@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getProducts } from '../../utils/getProducts';
+import { getProducts } from '../../lib/api/services/products';
 import { Table, Button, ButtonToolbar } from 'react-bootstrap';
 export const Product = () => {
   const URL_PUBLIC =
@@ -7,7 +7,8 @@ export const Product = () => {
   const [product, setProduct] = useState([]);
   const [updateList, setUpdateList] = useState(false);
   useEffect(() => {
-    getProducts().then((data) => {
+    getProducts().then((response) => {
+      const { data } = response;
       setProduct(data.data);
     });
   }, [updateList]);

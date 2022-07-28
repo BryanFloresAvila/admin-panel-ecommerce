@@ -15,33 +15,37 @@ export const ModalAdd = ({
       name: e.target[0].value,
     };
     createCategory(data)
-    .then((response) => {
-      console.log(response);
-      if (response.status === 200) {
-        setUpdateList(!updateList);
-        handleCloseModalAdd();
-        sweetAlert.fire(
-          'Saved!',
-          `The register ${response.data.reference} has been saved correctly !`,
-          'success'
-        );
-      } else {
+      .then((response) => {
+        if (response.status === 200) {
+          setUpdateList(!updateList);
+          sweetAlert
+            .fire(
+              'Saved!',
+              `The register ${response.data.reference} has been saved correctly !`,
+              'success'
+            )
+            .then((response) => {
+              if (response.isConfirmed) {
+                handleCloseModalAdd();
+              }
+            });
+        } else {
+          sweetAlert.fire({
+            title: 'Error',
+            text: 'Something went wrong',
+            icon: 'error',
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
         sweetAlert.fire({
           title: 'Error',
           text: 'Something went wrong',
           icon: 'error',
         });
-      }
-    }).catch((error) => {
-      console.log(error);
-      sweetAlert.fire({
-        title: 'Error',
-        text: 'Something went wrong',
-        icon: 'error',
       });
-    })
   };
-
 
   return (
     <Modal show={showModalAdd} onHide={handleCloseModalAdd}>

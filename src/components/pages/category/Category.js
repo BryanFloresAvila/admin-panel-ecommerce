@@ -5,7 +5,8 @@ import { ModalEdit } from './ModalEdit';
 import { ModalAdd } from './ModalAdd';
 import { Loading } from '../../../components/Loading';
 import { useModal } from '../../../hooks/useModal';
-import { getCategories,deleteCategory } from '../../../lib/api/services/categories';
+import { getCategories, deleteCategory } from '../../../lib/api/services/categories';
+import { StatsCard } from '../../StatsCard';
 export const Category = () => {
   console.log('Category has been rendered');
   const [updateList, setUpdateList] = useState(false);
@@ -22,7 +23,6 @@ export const Category = () => {
   };
  */
   const handleDelete = (category) => {
-  
     sweetAlert
       .fire({
         title: `Are you sure to delete ${category.name} ?`,
@@ -57,7 +57,7 @@ export const Category = () => {
   };
 
   useEffect(() => {
-    getCategories().then(({data}) => {
+    getCategories().then(({ data }) => {
       const { data: categories } = data;
       setLoading(false);
       setCategories(categories);
@@ -66,6 +66,7 @@ export const Category = () => {
 
   return (
     <div className="container-lg">
+      <StatsCard variant="primary"></StatsCard>
       <div className="row py-3">
         <div className="col">
           <h2>Category List</h2>
@@ -81,7 +82,7 @@ export const Category = () => {
           <tr>
             <th>#</th>
             <th className="text-center">Name</th>
-            <th className="text-center">Action</th>
+            <th className="text-end">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -90,7 +91,7 @@ export const Category = () => {
               <th scope="row">{index + 1}</th>
               <td className="text-center">{category.name}</td>
               <td>
-                <ButtonToolbar className="justify-content-center">
+                <ButtonToolbar className="justify-content-end">
                   <Button
                     variant="danger"
                     className="me-3"

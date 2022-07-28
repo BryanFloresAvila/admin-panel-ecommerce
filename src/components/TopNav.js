@@ -14,7 +14,7 @@ export const TopNav = () => {
   return (
     <>
       <Navbar bg="dark" variant="dark" expand="lg">
-        <Container>
+        <Container fluid="lg">
           <Navbar.Brand as={Link} to="/Home">
             Admin Panel
           </Navbar.Brand>
