@@ -1,23 +1,25 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
-
+import Stats from './Icons/Stats';
 export const StatsCard = (props) => {
-  const { variant, header, title, description } = props;
+  const { variant, title, quantity } = props;
   return (
     <Card
       bg={variant.toLowerCase()}
       key={variant}
       text={variant.toLowerCase() === 'light' ? 'dark' : 'white'}
-      style={{ width: '18rem' }}
-      className="mt-2"
+      className="col col-sm-6 col-lg-4"
     >
-      <Card.Header>Header</Card.Header>
       <Card.Body>
-        <Card.Title>{variant} Card Title </Card.Title>
-        <Card.Text>
-          Some quick example text to build on the card title and make up the bulk of the
-          card's content.
-        </Card.Text>
+      <Card.Title>Total {title}</Card.Title>
+      <div className="row">
+        <div className="col d-flex flex-column justify-content-center">
+          <p className='fs-1 m-0'>{quantity}</p>
+        </div>
+        <div className="col-auto">
+          <Stats width="80px"/>
+        </div>
+      </div>
       </Card.Body>
     </Card>
   );

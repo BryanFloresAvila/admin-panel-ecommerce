@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, ButtonToolbar } from 'react-bootstrap';
+import { Table, Button, ButtonToolbar, Container } from 'react-bootstrap';
 import sweetAlert from 'sweetalert2';
 import { ModalEdit } from './ModalEdit';
 import { ModalAdd } from './ModalAdd';
@@ -13,7 +13,6 @@ export const Category = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dataModal, setDataModal] = useState({});
-
   const modalAdd = useModal();
   const modalEdit = useModal();
 
@@ -65,8 +64,10 @@ export const Category = () => {
   }, [updateList]);
 
   return (
-    <div className="container-lg">
-      <StatsCard variant="primary"></StatsCard>
+    <Container>
+      <div className="mt-2 row">
+        <StatsCard variant="primary" title="Category" quantity={categories.length} ></StatsCard>
+      </div>
       <div className="row py-3">
         <div className="col">
           <h2>Category List</h2>
@@ -130,6 +131,6 @@ export const Category = () => {
         setUpdateList={setUpdateList}
       />
       {loading && <Loading />}
-    </div>
+    </Container>
   );
 };

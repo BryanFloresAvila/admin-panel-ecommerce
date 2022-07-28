@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getProducts } from '../../lib/api/services/products';
-import { Table, Button, ButtonToolbar } from 'react-bootstrap';
+import { Table, Button, ButtonToolbar, Container } from 'react-bootstrap';
+import { StatsCard } from '../StatsCard';
 export const Product = () => {
   const URL_PUBLIC =
     'https://backend-project-pam-production.up.railway.app/uploads/products/';
@@ -13,7 +14,10 @@ export const Product = () => {
     });
   }, [updateList]);
   return (
-    <div className="container-lg ">
+    <Container>
+      <div className="mt-2 row">
+        <StatsCard variant="primary" title="Product" quantity={product.length} ></StatsCard>
+      </div>
       <div className="row py-3">
         <div className="col">
           <h2>Product List</h2>
@@ -48,7 +52,7 @@ export const Product = () => {
               <td className="align-middle">{item.name}</td>
               <td className="align-middle ">{item.description}</td>
 
-              <td className="align-middle  ">{item.category}</td>
+              <td className="align-middle  ">{item.category?.name}</td>
               <td className="align-middle ">{item.price}</td>
 
               <td className="align-middle">
@@ -82,6 +86,6 @@ export const Product = () => {
           ))}
         </tbody>
       </Table>
-    </div>
+    </Container>
   );
 };
