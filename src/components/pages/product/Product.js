@@ -1,12 +1,63 @@
 import React, { useEffect, useState } from 'react';
-import { getProducts } from '../../lib/api/services/products';
+import sweetAlert from 'sweetalert2';
+import { ModalEdit } from './ModalEdit';
+import { ModalAdd } from './ModalAdd';
+import { useModal } from '../../../hooks/useModal';
+import { getProducts } from '../../../lib/api/services/products';
 import { Table, Button, ButtonToolbar, Container } from 'react-bootstrap';
-import { StatsCard } from '../StatsCard';
+import { StatsCard } from '../../StatsCard';
+import { getProduct, deleteProduct } from '../../../lib/api/services/products';
 export const Product = () => {
+
   const URL_PUBLIC =
     'https://backend-project-pam-production.up.railway.app/uploads/products/';
+  
   const [product, setProduct] = useState([]);
   const [updateList, setUpdateList] = useState(false);
+  const [dataModal, setDataModal] = useState({});
+  const modalAdd = useModal();
+  const modalEdit = useModal();
+
+  const handleDelete = (product) => {
+    sweetAlert
+      .fire({
+        title: `Are you sure to delete ${product.name} ?`,
+        text: 'This action cannot be undone!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancel',
+        confirmButtonText: 'Yes, Delete!',
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          deleteProduct(product._id).then((response) => {
+            if (response.status === 200) {
+              sweetAlert.fire(
+                'Deleted!',
+                `Registration successfully deleted ${product.name}!`,
+                'success'
+              );
+              setUpdateList(!updateList);
+            } else {
+              sweetAlert.fire(
+                'Error!',
+                'There was a problem with deleting the record!',
+                'error'
+              );
+            }
+          });
+        }
+      });
+  };
+
+
+
+
+
+
+
   useEffect(() => {
     getProducts().then((response) => {
       const { data } = response;
@@ -24,7 +75,7 @@ export const Product = () => {
         </div>
         <div className="col d-flex justify-content-end">
           <Button className="d-block" variant="primary">
-            Add Category
+            Add product
           </Button>
         </div>
       </div>
@@ -36,6 +87,7 @@ export const Product = () => {
             <th>Name</th>
             <th>Description</th>
             <th>Category</th>
+            <th>Stock</th>
             <th>Price</th>
             <th>Actions</th>
           </tr>
@@ -53,6 +105,7 @@ export const Product = () => {
               <td className="align-middle ">{item.description}</td>
 
               <td className="align-middle  ">{item.category?.name}</td>
+              <td className="align-middle  ">{item.stock}</td>
               <td className="align-middle ">{item.price}</td>
 
               <td className="align-middle">
@@ -65,7 +118,7 @@ export const Product = () => {
                     variant="danger"
                     style={{ width: '70px' }}
                     onClick={() => {
-                      setUpdateList(!updateList);
+                      handleDelete(item);
                     }}
                   >
                     Delete
@@ -75,7 +128,7 @@ export const Product = () => {
                     variant="primary"
                     style={{ width: '70px' }}
                     onClick={() => {
-                      setUpdateList(!updateList);
+                      modalEdit.handleShowModal();
                     }}
                   >
                     Edit
@@ -86,6 +139,19 @@ export const Product = () => {
           ))}
         </tbody>
       </Table>
+      <ModalEdit
+        showModal={modalEdit.showModal}
+        handleCloseModal={modalEdit.handleCloseModal}
+        dataModal={dataModal}
+        updateList={modalEdit.updateList}
+        setUpdateList={setUpdateList}
+      />
+      <ModalAdd
+        showModalAdd={modalAdd.showModal}
+        handleCloseModalAdd={modalAdd.handleCloseModal}
+        updateList={updateList}
+        setUpdateList={setUpdateList}
+      />
     </Container>
   );
 };

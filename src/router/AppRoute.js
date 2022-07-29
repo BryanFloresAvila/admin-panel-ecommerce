@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Home } from '../components/pages/Home';
 import { Category } from '../components/pages/category/Category';
-import { Product } from '../components/pages/Product';
+import { Product } from '../components/pages/product/Product';
 import { Login } from '../components/pages/Login';
 import { ProtectedRoute } from './ProtectedRoute';
 import { PublicRoute } from './PublicRoute';
