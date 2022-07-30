@@ -14,7 +14,8 @@ export const ModalAdd = ({
     const data = {
       name: e.target[0].value,
     };
-    createCategory(data)
+    console.log(data);
+    createCategory(JSON.parse(JSON.stringify(data)))
       .then((response) => {
         if (response.status === 200) {
           setUpdateList(!updateList);
