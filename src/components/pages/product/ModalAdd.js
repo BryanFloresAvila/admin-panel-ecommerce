@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import sweetAlert from 'sweetalert2';
-import { createCategory } from '../../../lib/api/services/categories';
 import { createProduct } from '../../../lib/api/services/products';
 import { getCategories } from '../../../lib/api/services/categories';
 export const ModalAdd = ({

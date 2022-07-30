@@ -7,11 +7,8 @@ import { getProducts } from '../../../lib/api/services/products';
 import { Table, Button, ButtonToolbar, Container } from 'react-bootstrap';
 import { StatsCard } from '../../StatsCard';
 import { Loading } from '../../../components/Loading';
-import { getProduct, deleteProduct } from '../../../lib/api/services/products';
+import { deleteProduct } from '../../../lib/api/services/products';
 export const Product = () => {
-  const URL_PUBLIC =
-    'https://backend-project-pam-production.up.railway.app/uploads/products/';
-
   const [product, setProduct] = useState([]);
   const [updateList, setUpdateList] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -95,7 +92,10 @@ export const Product = () => {
                 {index + 1}
               </th>
               <td>
-                <img src={`${URL_PUBLIC}${item.image}`} width="100" />
+                <img
+                  src={`${process.env.REACT_APP_API_URL_PUBLIC}${item.image}`}
+                  width="100"
+                />
               </td>
               <td className="align-middle">{item.name}</td>
               <td className="align-middle ">{item.description}</td>

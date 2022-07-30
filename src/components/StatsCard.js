@@ -11,15 +11,15 @@ export const StatsCard = (props) => {
       className="col col-sm-6 col-lg-4"
     >
       <Card.Body>
-      <Card.Title>Total {title}</Card.Title>
-      <div className="row">
-        <div className="col d-flex flex-column justify-content-center">
-          <p className='fs-1 m-0'>{quantity}</p>
+        <Card.Title>Total {title}</Card.Title>
+        <div className="row">
+          <div className="col d-flex flex-column justify-content-center">
+            <p className="fs-1 m-0">{quantity}</p>
+          </div>
+          <div className="col-auto">
+            <Stats width="80px" />
+          </div>
         </div>
-        <div className="col-auto">
-          <Stats width="80px"/>
-        </div>
-      </div>
       </Card.Body>
     </Card>
   );
