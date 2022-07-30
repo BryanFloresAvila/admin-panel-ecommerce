@@ -6,7 +6,7 @@ import {
   REQUEST_VERIFY_TOKEN,
   ERROR_LOGIN,
   ERROR_VERIFY_TOKEN,
-} from '../actions/type';
+} from '../actions/auth/type';
 
 export const initialState = {
   user: {},

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useAuth } from '../../store/context/authContext';
-import { login } from '../../store/actions/actions';
+import { login } from '../../store/actions/auth/actions';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from '../../components/Loading';
 export const Login = () => {

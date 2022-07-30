@@ -6,14 +6,15 @@ import { useModal } from '../../../hooks/useModal';
 import { getProducts } from '../../../lib/api/services/products';
 import { Table, Button, ButtonToolbar, Container } from 'react-bootstrap';
 import { StatsCard } from '../../StatsCard';
+import { Loading } from '../../../components/Loading';
 import { getProduct, deleteProduct } from '../../../lib/api/services/products';
 export const Product = () => {
-
   const URL_PUBLIC =
     'https://backend-project-pam-production.up.railway.app/uploads/products/';
-  
+
   const [product, setProduct] = useState([]);
   const [updateList, setUpdateList] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [dataModal, setDataModal] = useState({});
   const modalAdd = useModal();
   const modalEdit = useModal();
@@ -52,29 +53,24 @@ export const Product = () => {
       });
   };
 
-
-
-
-
-
-
   useEffect(() => {
     getProducts().then((response) => {
       const { data } = response;
+      setLoading(false);
       setProduct(data.data);
     });
   }, [updateList]);
   return (
     <Container>
       <div className="mt-2 row">
-        <StatsCard variant="primary" title="Product" quantity={product.length} ></StatsCard>
+        <StatsCard variant="primary" title="Product" quantity={product.length}></StatsCard>
       </div>
       <div className="row py-3">
         <div className="col">
           <h2>Product List</h2>
         </div>
         <div className="col d-flex justify-content-end">
-          <Button className="d-block" variant="primary">
+          <Button className="d-block" variant="primary" onClick={modalAdd.handleShowModal}>
             Add product
           </Button>
         </div>
@@ -128,6 +124,7 @@ export const Product = () => {
                     variant="primary"
                     style={{ width: '70px' }}
                     onClick={() => {
+                      setDataModal(item);
                       modalEdit.handleShowModal();
                     }}
                   >
@@ -152,6 +149,7 @@ export const Product = () => {
         updateList={updateList}
         setUpdateList={setUpdateList}
       />
+      {loading && <Loading />}
     </Container>
   );
 };

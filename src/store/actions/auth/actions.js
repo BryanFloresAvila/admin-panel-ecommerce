@@ -6,10 +6,10 @@ import {
   REQUEST_VERIFY_TOKEN,
   ERROR_LOGIN,
   ERROR_VERIFY_TOKEN,
-} from '../actions/type';
+} from './type';
 
 import axios from 'axios';
-import { token } from '../../utils/auth';
+import { token } from '../../../utils/auth';
 export const login = (dispatch, loginPayload) => {
   console.log('executing login...');
   const URL = 'https://backend-project-pam-production.up.railway.app/api/v1/auth/login';

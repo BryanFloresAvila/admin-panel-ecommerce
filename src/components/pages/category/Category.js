@@ -16,11 +16,6 @@ export const Category = () => {
   const modalAdd = useModal();
   const modalEdit = useModal();
 
-  /* const handleChangeModal = ({ target }) => {
-    console.log(target.value);
-    return target.value;
-  };
- */
   const handleDelete = (category) => {
     sweetAlert
       .fire({
@@ -66,7 +61,11 @@ export const Category = () => {
   return (
     <Container>
       <div className="mt-2 row">
-        <StatsCard variant="primary" title="Category" quantity={categories.length} ></StatsCard>
+        <StatsCard
+          variant="primary"
+          title="Category"
+          quantity={categories.length}
+        ></StatsCard>
       </div>
       <div className="row py-3">
         <div className="col">
@@ -106,6 +105,7 @@ export const Category = () => {
                     variant="primary"
                     onClick={() => {
                       setDataModal(category);
+                      console.log(dataModal);
                       modalEdit.handleShowModal();
                     }}
                   >

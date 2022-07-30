@@ -7,7 +7,7 @@ import { Login } from '../components/pages/Login';
 import { ProtectedRoute } from './ProtectedRoute';
 import { PublicRoute } from './PublicRoute';
 import { useAuth } from '../store/context/authContext';
-import { verifyToken as verifyTokenF } from '../store/actions/actions';
+import { verifyToken as verifyTokenF } from '../store/actions/auth/actions';
 import { Loading } from '../components/Loading';
 
 export const AppRoute = () => {

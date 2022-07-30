@@ -2,7 +2,7 @@ import React from 'react';
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../store/context/authContext';
-import { logout } from '../store/actions/actions';
+import { logout } from '../store/actions/auth/actions';
 export const TopNav = () => {
   const { state, dispatch } = useAuth();
   const { isLogged, user } = state;
