@@ -5,7 +5,6 @@ Página creada para administrar las categorias y productos de un ECOMMERCE
  -  REACT JS
  -  BOOSTRAP 5
  -  REACT-BOOSTRAP
-
 ## Estructura de archivos
 
 📦src\
@@ -58,4 +57,8 @@ Página creada para administrar las categorias y productos de un ECOMMERCE
  ┣ 📜index.css\
  ┗ 📜index.js\
 
-
+## Demo
+Esta aplicación fue desplegada en Netlify: Visite :smile: [here](https://admin-panel-ecommerce.netlify.app).\
+ Credenciales de prueba\
+  correo: admin@admin.com\
+  contraseña:  admin
