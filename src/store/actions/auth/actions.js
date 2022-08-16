@@ -7,15 +7,13 @@ import {
   ERROR_LOGIN,
   ERROR_VERIFY_TOKEN,
 } from './type';
-
-import axios from 'axios';
+import {login as serviceLogin, verifyToken as serviceVerifyToken} from '../../../lib/api/services/login';
 import { token } from '../../../utils/auth';
+
 export const login = (dispatch, loginPayload) => {
   console.log('executing login...');
-  const URL = 'https://backend-project-pam-production.up.railway.app/api/v1/auth/login';
   dispatch({ type: REQUEST_LOGIN });
-  axios
-    .post(URL, loginPayload)
+  serviceLogin(loginPayload.email, loginPayload.password)
     .then((response) => {
       if (response.status === 200) {
         if (response.data.user.rol === 'admin') {
@@ -44,19 +42,10 @@ export const logout = (dispatch) => {
   });
 };
 export const verifyToken = (dispatch) => {
-  const URL =
-    'https://backend-project-pam-production.up.railway.app/api/v1/auth/verifyTokenAdmin';
   const tokenStorage = token.get() ? token.get() : null;
   if (tokenStorage != null) {
     dispatch({ type: REQUEST_VERIFY_TOKEN });
-    axios
-      .post(
-        URL,
-        {},
-        {
-          headers: { Authorization: `Bearer ${tokenStorage}` },
-        }
-      )
+    serviceVerifyToken(tokenStorage)
       .then((response) => {
         if (response.status === 200) {
           dispatch({
