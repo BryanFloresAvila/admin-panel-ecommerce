@@ -27,6 +27,7 @@ export const Category = () => {
         cancelButtonColor: '#d33',
         cancelButtonText: 'Cancel',
         confirmButtonText: 'Yes, Delete!',
+        heightAuto: false,
       })
       .then((result) => {
         if (result.isConfirmed) {

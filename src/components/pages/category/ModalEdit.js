@@ -25,6 +25,7 @@ export const ModalEdit = ({
             text: 'Something went wrong',
             icon: 'error',
             confirmButtonText: 'Ok',
+            heightAuto:false,
           });
         }
       })
@@ -34,6 +35,7 @@ export const ModalEdit = ({
           text: 'Something went wrong',
           icon: 'error',
           confirmButtonText: 'Ok',
+          heightAuto:false,
         });
       });
   };

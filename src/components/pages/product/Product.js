@@ -33,16 +33,22 @@ export const Product = () => {
           deleteProduct(product._id).then((response) => {
             if (response.status === 200) {
               sweetAlert.fire(
-                'Deleted!',
-                `Registration successfully deleted ${product.name}!`,
-                'success'
+                {
+                  title:'Deleted!',
+                  text:`Registration successfully deleted ${product.name}!`,
+                  icon:'success',
+                  heightAuto:false,
+                }
               );
               setUpdateList(!updateList);
             } else {
               sweetAlert.fire(
-                'Error!',
-                'There was a problem with deleting the record!',
-                'error'
+                {
+                  title:'Error!',
+                  text:'There was a problem with deleting the record!',
+                  icon:'error',
+                  heightAuto:false,
+              }
               );
             }
           });

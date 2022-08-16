@@ -28,9 +28,12 @@ export const ModalAdd = ({
           setUpdateList(!updateList);
           sweetAlert
             .fire(
-              'Saved!',
-              `The register ${response.data.reference} has been saved correctly !`,
-              'success'
+              {
+                title:'Saved!',
+                text:`The register ${response.data.reference} has been saved correctly !`,
+                icon:'success',
+                heightAuto:false,
+              }
             )
             .then((response) => {
               if (response.isConfirmed) {
@@ -42,6 +45,7 @@ export const ModalAdd = ({
             title: 'Error',
             text: 'Something went wrong',
             icon: 'error',
+            heightAuto:false,
           });
         }
       })
@@ -51,6 +55,7 @@ export const ModalAdd = ({
           title: 'Error',
           text: 'Something went wrong',
           icon: 'error',
+          heightAuto:false,
         });
       });
   };
