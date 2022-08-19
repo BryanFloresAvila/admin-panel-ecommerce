@@ -1,8 +1,8 @@
-#container{
-    padding-bottom: 72px;
+.ct {
+  padding-bottom: 72px;
 }
-footer{
-    position: absolute;
-    bottom: 0;
-    width: 100%;
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
