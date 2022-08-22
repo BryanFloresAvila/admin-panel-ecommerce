@@ -10,4 +10,5 @@ export const productTemplate = {
   price: '',
   category: '',
   image: '',
+  stock: '',
 };
