@@ -1,60 +1,38 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import sweetAlert from 'sweetalert2';
-import { createCategory } from '../../../lib/api/services/categories';
+import { createCategory as serviceCreateCategory } from '../../../lib/api/services/categories';
+import { configSavedCategoryError, connfigSavedCategory } from '../../../utils/sl2/configs';
+import { useCategoryStore } from '../../../store/index';
+import { addCategory, addCategoryFail, addCategorySuccess } from '../../../store/actions/category/action';
+export const ModalAdd = ({ show, handleClose, updateList, setUpdateList }) => {
+  const { dispatch, StateCategories, StateCategory } = useCategoryStore();
+  //const { category, loading: loadingCategory, error: errorCategory } = StateCategory;
 
-export const ModalAdd = ({
-  showModalAdd,
-  handleCloseModalAdd,
-  updateList,
-  setUpdateList,
-}) => {
-  const handleSubmitAdd = async (e) => {
+  const handleSubmitAdd = (e) => {
     e.preventDefault();
-    const data = {
+    let data = {
       name: e.target[0].value,
     };
-    console.log(data);
-    createCategory(JSON.parse(JSON.stringify(data)))
+    dispatch(addCategory());
+    serviceCreateCategory(data)
       .then((response) => {
-        if (response.status === 200) {
-          setUpdateList(!updateList);
-          sweetAlert
-            .fire(
-              {
-                title:'Saved!',
-                text:`The register ${response.data.reference} has been saved correctly !`,
-                icon:'success',
-                heightAuto:false,
-              }
-            )
-            .then((response) => {
-              if (response.isConfirmed) {
-                handleCloseModalAdd();
-              }
-            });
-        } else {
-          sweetAlert.fire({
-            title: 'Error',
-            text: 'Something went wrong',
-            icon: 'error',
-            heightAuto:false,
-          });
-        }
+        if (response.status !== 200) sweetAlert.fire(configSavedCategoryError(data.name));
+        return response.data;
+      })
+      .then((data) => {
+        sweetAlert.fire(connfigSavedCategory(data.name));
+        dispatch(addCategorySuccess(data));
+        handleClose();
+        setUpdateList(!updateList);
       })
       .catch((error) => {
-        console.log(error);
-        sweetAlert.fire({
-          title: 'Error',
-          text: 'Something went wrong',
-          icon: 'error',
-          heightAuto:false,
-        });
+        dispatch(addCategoryFail(error.message));
+        sweetAlert.fire(configSavedCategoryError(data.name));
       });
   };
-
   return (
-    <Modal show={showModalAdd} onHide={handleCloseModalAdd}>
+    <Modal show={show} onHide={handleClose}>
       <Modal.Header>
         <Modal.Title>Add Category</Modal.Title>
       </Modal.Header>
@@ -62,17 +40,11 @@ export const ModalAdd = ({
         <Modal.Body>
           <Form.Group className="mb-3">
             <Form.Label>Name Category</Form.Label>
-            <Form.Control
-              type="text"
-              name="category"
-              //value={dataModal.name}
-              placeholder="Name Category"
-              required
-            />
+            <Form.Control type="text" name="category" placeholder="Name Category" required />
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" type="reset" onClick={handleCloseModalAdd}>
+          <Button variant="secondary" type="reset" onClick={handleClose}>
             Cancel
           </Button>
           <Button variant="success" type="submit">

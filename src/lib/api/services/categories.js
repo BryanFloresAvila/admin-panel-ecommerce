@@ -1,5 +1,21 @@
 import { apiPublic, apiPrivate } from '../axios/index';
 import { token } from '../../../utils/auth';
+/*
+
+Backend ---> Axios ---> Frontend 
+
+Reponse for any request:
+  data: {
+    config: {},
+    data: {}, ---> data is the response from the server (Backend)
+    headers: {},
+    request: {},
+    status: xxx,
+    statusText: 'xxx'
+  }
+  
+*/
+
 export const getCategories = () => {
   return apiPublic.get('/categories');
 };

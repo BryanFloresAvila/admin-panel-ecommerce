@@ -5,79 +5,86 @@ import { ModalEdit } from './ModalEdit';
 import { ModalAdd } from './ModalAdd';
 import { Loading } from '../../../components/Loading';
 import { useModal } from '../../../hooks/useModal';
-import { getCategories, deleteCategory } from '../../../lib/api/services/categories';
+import {
+  deleteCategory as serviceDeleteCategory,
+  getCategories as serviceGetCategories,
+} from '../../../lib/api/services/categories';
 import { StatsCard } from '../../StatsCard';
+import { useCategoryStore } from '../../../store/index';
+import {
+  getCategories,
+  getCategoriesSuccess,
+  getCategoriesFail,
+  selectCategory,
+  deleteCategory,
+  deleteCategoryFail,
+} from '../../../store/actions/category/action';
+import { categoryTemplate } from '../../../utils/templateForm/templates';
+import { configDelete, configDeleted, configDeletedError } from '../../../utils/sl2/configs';
+
 export const Category = () => {
   console.log('Category has been rendered');
-  const [updateList, setUpdateList] = useState(false);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [dataModal, setDataModal] = useState({});
-  const modalAdd = useModal();
-  const modalEdit = useModal();
+  const { dispatch, StateCategories, StateCategory } = useCategoryStore();
 
+  const { categories, loading: loadingCategories, error: errorCategories } = StateCategories;
+  const { category, loading: loadingCategory, error: errorCategory } = StateCategory;
+  const [updateList, setUpdateList] = useState(false);
+  // hooks to handle modal
+  const modalAdd = useModal();
+  const modalEdit = useModal(categoryTemplate);
   const handleDelete = (category) => {
-    sweetAlert
-      .fire({
-        title: `Are you sure to delete ${category.name} ?`,
-        text: 'This action cannot be undone!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        cancelButtonText: 'Cancel',
-        confirmButtonText: 'Yes, Delete!',
-        heightAuto: false,
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-          deleteCategory(category._id).then((response) => {
-            if (response.status === 200) {
-              sweetAlert.fire(
-                'Deleted!',
-                `Registration successfully deleted ${category.name}!`,
-                'success'
-              );
-              setUpdateList(!updateList);
-            } else {
-              sweetAlert.fire(
-                'Error!',
-                'There was a problem with deleting the record!',
-                'error'
-              );
-            }
+    sweetAlert.fire(configDelete(category.name)).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteCategory());
+        serviceDeleteCategory(category._id)
+          .then((response) => {
+            if (response.status !== 200) sweetAlert.fire(configDeletedError(category.name));
+            return response.data;
+          })
+          .then((data) => {
+            dispatch(deleteCategory());
+            sweetAlert.fire(configDeleted(category.name));
+            setUpdateList(!updateList);
+          })
+          .catch((error) => {
+            dispatch(deleteCategoryFail(error.message));
+            sweetAlert.fire(configDeletedError(category.name));
           });
-        }
-      });
+      }
+    });
   };
 
   useEffect(() => {
-    getCategories().then(({ data }) => {
-      const { data: categories } = data;
-      setLoading(false);
-      setCategories(categories);
-    });
-  }, [updateList]);
-
+    dispatch(getCategories());
+    serviceGetCategories()
+      .then((response) => {
+        if (response.status !== 200) return new Error('An error occurred');
+        return response.data;
+      })
+      .then((data) => {
+        dispatch(getCategoriesSuccess(data.data));
+        console.log(loadingCategories);
+      })
+      .catch((error) => {
+        dispatch(getCategoriesFail(error.message));
+      });
+  }, [updateList, dispatch]);
   return (
-    <Container>
+    <Container className="ct">
       <div className="mt-2 row">
-        <StatsCard
-          variant="primary"
-          title="Category"
-          quantity={categories.length}
-        ></StatsCard>
+        <StatsCard variant="primary" title="Category" quantity={categories.length}></StatsCard>
       </div>
       <div className="row py-3">
         <div className="col">
           <h2>Category List</h2>
         </div>
         <div className="col d-flex justify-content-end">
-          <Button className="d-block" variant="primary" onClick={modalAdd.handleShowModal}>
+          <Button className="d-block" variant="primary" onClick={modalAdd.handleShow}>
             Add Category
           </Button>
         </div>
       </div>
+      {loadingCategories && <Loading />}
       <Table striped hover size="sm">
         <thead>
           <tr>
@@ -105,9 +112,8 @@ export const Category = () => {
                   <Button
                     variant="primary"
                     onClick={() => {
-                      setDataModal(category);
-                      console.log(dataModal);
-                      modalEdit.handleShowModal();
+                      dispatch(selectCategory(category));
+                      modalEdit.handleShow(category);
                     }}
                   >
                     Edit
@@ -119,19 +125,19 @@ export const Category = () => {
         </tbody>
       </Table>
       <ModalEdit
-        showModal={modalEdit.showModal}
-        handleCloseModal={modalEdit.handleCloseModal}
-        dataModal={dataModal}
-        updateList={modalEdit.updateList}
+        show={modalEdit.show}
+        handleClose={modalEdit.handleClose}
+        updateList={updateList}
+        data={modalEdit.data}
+        handleChange={modalEdit.handleChange}
         setUpdateList={setUpdateList}
       />
       <ModalAdd
-        showModalAdd={modalAdd.showModal}
-        handleCloseModalAdd={modalAdd.handleCloseModal}
+        show={modalAdd.show}
+        handleClose={modalAdd.handleClose}
         updateList={updateList}
         setUpdateList={setUpdateList}
       />
-      {loading && <Loading />}
     </Container>
   );
 };
