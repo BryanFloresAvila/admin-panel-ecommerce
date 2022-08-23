@@ -21,6 +21,7 @@ import {
   deleteProductFail,
   deleteProductSuccess,
 } from '../../../store/actions/product/action';
+import { configDelete, configDeleted, configDeletedError } from '../../../utils/sl2/configs';
 
 export const Product = () => {
   const { dispatch, StateProducts } = useProductStore();
@@ -30,39 +31,25 @@ export const Product = () => {
   const modalEdit = useModal(productTemplate);
 
   const handleDelete = (product) => {
-    /* sweetAlert
-      .fire({
-        title: `Are you sure to delete ${product.name} ?`,
-        text: 'This action cannot be undone!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        cancelButtonText: 'Cancel',
-        confirmButtonText: 'Yes, Delete!',
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-          serviceDeleteProduct(product._id).then((response) => {
-            if (response.status === 200) {
-              sweetAlert.fire({
-                title: 'Deleted!',
-                text: `Registration successfully deleted ${product.name}!`,
-                icon: 'success',
-                heightAuto: false,
-              });
-              setUpdateList(!updateList);
-            } else {
-              sweetAlert.fire({
-                title: 'Error!',
-                text: 'There was a problem with deleting the record!',
-                icon: 'error',
-                heightAuto: false,
-              });
-            }
+    sweetAlert.fire(configDelete(product.name)).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteProduct());
+        serviceDeleteProduct(product._id)
+          .then((response) => {
+            if (response.status !== 200) sweetAlert.fire(configDeletedError(product.name));
+            return response.data;
+          })
+          .then((data) => {
+            dispatch(deleteProductSuccess(data));
+            sweetAlert.fire(configDeleted(product.name));
+            setUpdateList(!updateList);
+          })
+          .catch((error) => {
+            dispatch(deleteProductFail(error.message));
+            sweetAlert.fire(configDeletedError(product.name));
           });
-        }
-      }); */
+      }
+    });
   };
 
   useEffect(() => {
@@ -160,6 +147,12 @@ export const Product = () => {
         updateList={updateList}
         data={modalEdit.data}
         handleChange={modalEdit.handleChange}
+        setUpdateList={setUpdateList}
+      />
+      <ModalAdd
+        show={modalAdd.show}
+        handleClose={modalAdd.handleClose}
+        updateList={updateList}
         setUpdateList={setUpdateList}
       />
       {loadingProducts && <Loading />}
