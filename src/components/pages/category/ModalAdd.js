@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import sweetAlert from 'sweetalert2';
 import { createCategory as serviceCreateCategory } from '../../../lib/api/services/categories';
-import { configSavedCategoryError, connfigSavedCategory } from '../../../utils/sl2/configs';
+import { configAddedError, configAdded } from '../../../utils/sl2/configs';
 import { useCategoryStore } from '../../../store/index';
 import { addCategory, addCategoryFail, addCategorySuccess } from '../../../store/actions/category/action';
 export const ModalAdd = ({ show, handleClose, updateList, setUpdateList }) => {
@@ -17,18 +17,18 @@ export const ModalAdd = ({ show, handleClose, updateList, setUpdateList }) => {
     dispatch(addCategory());
     serviceCreateCategory(data)
       .then((response) => {
-        if (response.status !== 200) sweetAlert.fire(configSavedCategoryError(data.name));
+        if (response.status !== 200) sweetAlert.fire(configAddedError(data.name));
         return response.data;
       })
       .then((data) => {
-        sweetAlert.fire(connfigSavedCategory(data.name));
+        sweetAlert.fire(configAdded(data.name));
         dispatch(addCategorySuccess(data));
         handleClose();
         setUpdateList(!updateList);
       })
       .catch((error) => {
         dispatch(addCategoryFail(error.message));
-        sweetAlert.fire(configSavedCategoryError(data.name));
+        sweetAlert.fire(configAddedError(data.name));
       });
   };
   return (

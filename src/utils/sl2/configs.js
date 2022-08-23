@@ -9,9 +9,9 @@ export const configError = {
   heightAuto: false,
 };
 
-export const configDelete = (nameCategory) => {
+export const configDelete = (name) => {
   return {
-    title: `Are you sure to delete ${nameCategory} ?`,
+    title: `Are you sure to delete ${name} ?`,
     text: 'This action cannot be undone!',
     icon: 'warning',
     showCancelButton: true,
@@ -23,26 +23,26 @@ export const configDelete = (nameCategory) => {
   };
 };
 
-export const configDeleted = (nameCategory) => {
+export const configDeleted = (name) => {
   return {
     title: 'Deleted!',
-    text: `Registration successfully deleted ${nameCategory}!`,
+    text: `Registration successfully deleted ${name}!`,
     icon: 'success',
     heightAuto: false,
   };
 };
-export const configDeletedError = (nameCategory) => {
+export const configDeletedError = (name) => {
   return {
     title: 'Error!',
-    text: `There was a problem with deleting the record ${nameCategory}!`,
+    text: `There was a problem with deleting the record ${name}!`,
     icon: 'error',
     heightAuto: false,
   };
 };
 
-export const configUpdate = (nameCategory) => {
+export const configUpdate = (name) => {
   return {
-    title: `Are you sure to update ${nameCategory} ?`,
+    title: `Are you sure to update ${name} ?`,
     text: 'This action cannot be undone!',
     icon: 'warning',
     showCancelButton: true,
@@ -54,54 +54,38 @@ export const configUpdate = (nameCategory) => {
   };
 };
 
-export const configUpdated = (nameCategory) => {
+export const configUpdated = (name) => {
   return {
     title: 'Updated!',
-    text: `Registration successfully updated ${nameCategory}!`,
+    text: `Registration successfully updated ${name}!`,
     icon: 'success',
     heightAuto: false,
   };
 };
 
-export const configUpdatedError = (nameCategory) => {
+export const configUpdatedError = (name) => {
   return {
     title: 'Error!',
-    text: `There was a problem with updating the record ${nameCategory}!`,
+    text: `There was a problem with updating the record ${name}!`,
     icon: 'error',
     heightAuto: false,
   };
 };
 
-export const configSaveCategory = (nameCategory) => {
-  return {
-    title: `Are you sure to save ${nameCategory} ?`,
-    text: 'This action cannot be undone!',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    cancelButtonText: 'Cancel',
-    confirmButtonText: 'Yes, Save!',
-    heightAuto: false,
-  };
-};
-
-export const connfigSavedCategory = (nameCategory) => {
+export const configAdded = (name) => {
   return {
     title: 'Saved!',
-    text: `Registration successfully saved ${nameCategory}!`,
+    text: `Registration successfully saved ${name}!`,
     icon: 'success',
     heightAuto: false,
   };
 };
 
-export const configSavedCategoryError = (nameCategory) => {
+export const configAddedError = (name) => {
   return {
     title: 'Error!',
-    text: `There was a problem with saving the record ${nameCategory}!`,
+    text: `There was a problem with saving the record ${name}!`,
     icon: 'error',
     heightAuto: false,
   };
 };
-
-/* PRODUCT */
