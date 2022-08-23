@@ -30,8 +30,9 @@ export const getProductsFail = (error) => ({
   payload: error,
 });
 
-export const selectProduct = () => ({
+export const selectProduct = (product) => ({
   type: types.SELECT_PRODUCT,
+  payload: product,
 });
 
 export const addProduct = () => ({
