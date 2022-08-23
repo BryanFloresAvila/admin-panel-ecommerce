@@ -1,15 +1,17 @@
 import { Button, Modal, Form } from 'react-bootstrap';
-import React, { useEffect, useState } from 'react';
 import sweetAlert from 'sweetalert2';
-import { updateProduct } from '../../../lib/api/services/products';
-import { getCategories } from '../../../lib/api/services/categories';
-export const ModalEdit = ({ updateList, setUpdateList, dataModal, handleClose, show }) => {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+import { updateProduct as serviceUpdateProduct } from '../../../lib/api/services/products';
+import { useCategoryStore, useProductStore } from '../../../store/index';
+import { configUpdatedError, configUpdate, configUpdated } from '../../../utils/sl2/configs';
+import { updateProduct, updateProductFail, updateProductSuccess } from '../../../store/actions/product/action';
+export const ModalEdit = ({ updateList, setUpdateList, handleClose, show, data, handleChange }) => {
+  const { dispatch: dispatchProduct, StateProduct } = useProductStore();
+  const { StateCategories } = useCategoryStore();
+  const { product, error: errorProduct } = StateProduct;
+  const { categories, error: errorCategories } = StateCategories;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(e);
 
     const data = {
       name: e.target[0].value,
@@ -19,40 +21,27 @@ export const ModalEdit = ({ updateList, setUpdateList, dataModal, handleClose, s
       price: e.target[4].value,
       image: e.target[5].files[0],
     };
-    console.log(data);
-    updateProduct(dataModal._id, data)
-      .then((response) => {
-        if (response.status === 200) {
-          setUpdateList(!updateList);
-          handleClose();
-        } else {
-          sweetAlert.fire({
-            title: 'Error',
-            text: 'Something went wrong',
-            icon: 'error',
-            confirmButtonText: 'Ok',
-            heightAuto: false,
+    sweetAlert.fire(configUpdate(product.name)).then((result) => {
+      if (result.isConfirmed) {
+        dispatchProduct(updateProduct());
+        serviceUpdateProduct(product._id, data)
+          .then((response) => {
+            if (response.status !== 200) sweetAlert.fire(configUpdatedError(product.name));
+            return response.data;
+          })
+          .then(() => {
+            dispatchProduct(updateProductSuccess());
+            sweetAlert.fire(configUpdated(product.name));
+            handleClose();
+            setUpdateList(!updateList);
+          })
+          .catch((error) => {
+            dispatchProduct(updateProductFail(error.message));
+            sweetAlert.fire(configUpdatedError(product.name));
           });
-        }
-      })
-      .catch((error) => {
-        sweetAlert.fire({
-          title: 'Error',
-          text: 'Something went wrong',
-          icon: 'error',
-          confirmButtonText: 'Ok',
-          heightAuto: false,
-        });
-      });
-  };
-
-  useEffect(() => {
-    getCategories().then(({ data }) => {
-      const { data: categories } = data;
-      setLoading(false);
-      setCategories(categories);
+      }
     });
-  }, []);
+  };
 
   return (
     <Modal show={show} onHide={handleClose}>
@@ -63,16 +52,16 @@ export const ModalEdit = ({ updateList, setUpdateList, dataModal, handleClose, s
         <Modal.Body>
           <Form.Group className="mb-1">
             <Form.Label>Name Product</Form.Label>
-            <Form.Control type="text" name="name" placeholder={dataModal.name} required />
+            <Form.Control type="text" name="name" onChange={handleChange} value={data.name} required />
           </Form.Group>
           <Form.Group className="mb-1">
             <Form.Label>Description</Form.Label>
-            <Form.Control type="text" name="description" placeholder={dataModal.description} required />
+            <Form.Control type="text" name="description" onChange={handleChange} value={data.description} required />
           </Form.Group>
           <Form.Group className="mb-1">
             <Form.Label>Name Category</Form.Label>
-            <Form.Select>
-              <option value={dataModal.category?._id}>{dataModal.category?.name}</option>
+            <Form.Select name="category">
+              <option value={data.category?._id}>{data.category?.name}</option>
               {categories.map((category) => {
                 return (
                   <option key={category._id} value={category._id}>
@@ -84,15 +73,15 @@ export const ModalEdit = ({ updateList, setUpdateList, dataModal, handleClose, s
           </Form.Group>
           <Form.Group className="mb-1">
             <Form.Label>Stock</Form.Label>
-            <Form.Control type="number" name="stock" placeholder={dataModal.stock} />
+            <Form.Control type="number" onChange={handleChange} name="stock" value={data.stock} />
           </Form.Group>
           <Form.Group className="mb-1">
             <Form.Label>Price</Form.Label>
-            <Form.Control type="number" name="price" placeholder={dataModal.price} />
+            <Form.Control type="number" onChange={handleChange} name="price" value={data.price} />
           </Form.Group>
           <Form.Group controlId="formFile" className="mb-1">
             <Form.Label>Image</Form.Label>
-            <Form.Control type="file" />
+            <Form.Control name="image" type="file" />
           </Form.Group>
         </Modal.Body>
 

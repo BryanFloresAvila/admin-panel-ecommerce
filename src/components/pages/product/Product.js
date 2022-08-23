@@ -3,22 +3,34 @@ import sweetAlert from 'sweetalert2';
 import { ModalEdit } from './ModalEdit';
 import { ModalAdd } from './ModalAdd';
 import { useModal } from '../../../hooks/useModal';
-import { getProducts } from '../../../lib/api/services/products';
+import {
+  getProducts as serviceGetProducts,
+  deleteProduct as serviceDeleteProduct,
+} from '../../../lib/api/services/products';
 import { Table, Button, ButtonToolbar, Container } from 'react-bootstrap';
 import { StatsCard } from '../../StatsCard';
 import { Loading } from '../../../components/Loading';
 import { productTemplate } from '../../../utils/templateForm/templates';
-import { deleteProduct } from '../../../lib/api/services/products';
+import { useProductStore } from '../../../store/index';
+import {
+  getProducts,
+  getProductsSuccess,
+  getProductsFail,
+  selectProduct,
+  deleteProduct,
+  deleteProductFail,
+  deleteProductSuccess,
+} from '../../../store/actions/product/action';
+
 export const Product = () => {
-  const [product, setProduct] = useState([]);
+  const { dispatch, StateProducts } = useProductStore();
+  const { products, loading: loadingProducts, error: errorProducts } = StateProducts;
   const [updateList, setUpdateList] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [dataModal, setDataModal] = useState({});
   const modalAdd = useModal();
   const modalEdit = useModal(productTemplate);
 
   const handleDelete = (product) => {
-    sweetAlert
+    /* sweetAlert
       .fire({
         title: `Are you sure to delete ${product.name} ?`,
         text: 'This action cannot be undone!',
@@ -31,7 +43,7 @@ export const Product = () => {
       })
       .then((result) => {
         if (result.isConfirmed) {
-          deleteProduct(product._id).then((response) => {
+          serviceDeleteProduct(product._id).then((response) => {
             if (response.status === 200) {
               sweetAlert.fire({
                 title: 'Deleted!',
@@ -50,20 +62,29 @@ export const Product = () => {
             }
           });
         }
-      });
+      }); */
   };
 
   useEffect(() => {
-    getProducts().then((response) => {
-      const { data } = response;
-      setLoading(false);
-      setProduct(data.data);
-    });
-  }, [updateList]);
+    dispatch(getProducts());
+    serviceGetProducts()
+      .then((response) => {
+        if (response.status !== 200) return new Error('An error occurred');
+        return response.data;
+      })
+      .then((data) => {
+        console.log(data.data);
+        dispatch(getProductsSuccess(data.data));
+      })
+      .catch((error) => {
+        dispatch(getProductsFail(error.message));
+      });
+  }, [updateList, dispatch]);
+
   return (
     <Container>
       <div className="mt-2 row">
-        <StatsCard variant="primary" title="Product" quantity={product.length}></StatsCard>
+        <StatsCard variant="primary" title="Product" quantity={products.length}></StatsCard>
       </div>
       <div className="row py-3">
         <div className="col">
@@ -89,20 +110,20 @@ export const Product = () => {
           </tr>
         </thead>
         <tbody>
-          {product.map((item, index) => (
-            <tr key={item._id}>
+          {products.map((product, index) => (
+            <tr key={product._id}>
               <th className="align-middle" scope="row">
                 {index + 1}
               </th>
               <td>
-                <img src={`${process.env.REACT_APP_API_URL_PUBLIC}${item.image}`} width="100" />
+                <img src={`${process.env.REACT_APP_API_URL_PUBLIC}${product.image}`} width="100" />
               </td>
-              <td className="align-middle">{item.name}</td>
-              <td className="align-middle ">{item.description}</td>
+              <td className="align-middle">{product.name}</td>
+              <td className="align-middle ">{product.description}</td>
 
-              <td className="align-middle  ">{item.category?.name}</td>
-              <td className="align-middle  ">{item.stock}</td>
-              <td className="align-middle ">{item.price}</td>
+              <td className="align-middle  ">{product.category?.name}</td>
+              <td className="align-middle  ">{product.stock}</td>
+              <td className="align-middle ">{product.price}</td>
 
               <td className="align-middle">
                 <ButtonToolbar className="justify-content-center " style={{ height: '100%' }}>
@@ -111,7 +132,7 @@ export const Product = () => {
                     variant="danger"
                     style={{ width: '70px' }}
                     onClick={() => {
-                      handleDelete(item);
+                      handleDelete(product);
                     }}
                   >
                     Delete
@@ -121,8 +142,8 @@ export const Product = () => {
                     variant="primary"
                     style={{ width: '70px' }}
                     onClick={() => {
-                      setDataModal(item);
-                      modalEdit.handleShow();
+                      dispatch(selectProduct(product));
+                      modalEdit.handleShow(product);
                     }}
                   >
                     Edit
@@ -136,17 +157,12 @@ export const Product = () => {
       <ModalEdit
         show={modalEdit.show}
         handleClose={modalEdit.handleClose}
-        dataModal={dataModal}
-        updateList={modalEdit.updateList}
-        setUpdateList={setUpdateList}
-      />
-      <ModalAdd
-        show={modalAdd.show}
-        handleClose={modalAdd.handleClose}
         updateList={updateList}
+        data={modalEdit.data}
+        handleChange={modalEdit.handleChange}
         setUpdateList={setUpdateList}
       />
-      {loading && <Loading />}
+      {loadingProducts && <Loading />}
     </Container>
   );
 };
