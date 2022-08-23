@@ -70,7 +70,7 @@ export const Product = () => {
   }, [updateList, dispatch]);
 
   return (
-    <Container>
+    <Container className="ct">
       <div className="mt-2 row">
         <StatsCard variant="primary" title="Product" quantity={products.length}></StatsCard>
       </div>
