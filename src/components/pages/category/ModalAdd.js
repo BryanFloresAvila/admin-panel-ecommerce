@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import sweetAlert from 'sweetalert2';
 import { createCategory as serviceCreateCategory } from '../../../lib/api/services/categories';
@@ -6,7 +6,7 @@ import { configAddedError, configAdded } from '../../../utils/sl2/configs';
 import { useCategoryStore } from '../../../store/index';
 import { addCategory, addCategoryFail, addCategorySuccess } from '../../../store/actions/category/action';
 export const ModalAdd = ({ show, handleClose, updateList, setUpdateList }) => {
-  const { dispatch, StateCategories, StateCategory } = useCategoryStore();
+  const { dispatch } = useCategoryStore();
   //const { category, loading: loadingCategory, error: errorCategory } = StateCategory;
 
   const handleSubmitAdd = (e) => {

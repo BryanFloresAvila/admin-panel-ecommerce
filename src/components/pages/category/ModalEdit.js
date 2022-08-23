@@ -6,8 +6,8 @@ import { updateCategory as serviceUpdateCategory } from '../../../lib/api/servic
 import { configUpdatedError, configUpdate, configUpdated } from '../../../utils/sl2/configs';
 import { updateCategory, updateCategoryFail, updateCategorySuccess } from '../../../store/actions/category/action';
 export const ModalEdit = ({ updateList, setUpdateList, handleClose, show, data, handleChange }) => {
-  const { dispatch, StateCategories, StateCategory } = useCategoryStore();
-  const { category, loading: loadingCategory, error: errorCategory } = StateCategory;
+  const { dispatch, StateCategory } = useCategoryStore();
+  const { category } = StateCategory;
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = {

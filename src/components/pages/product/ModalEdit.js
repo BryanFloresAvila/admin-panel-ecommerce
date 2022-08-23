@@ -7,8 +7,8 @@ import { updateProduct, updateProductFail, updateProductSuccess } from '../../..
 export const ModalEdit = ({ updateList, setUpdateList, handleClose, show, data, handleChange }) => {
   const { dispatch: dispatchProduct, StateProduct } = useProductStore();
   const { StateCategories } = useCategoryStore();
-  const { product, error: errorProduct } = StateProduct;
-  const { categories, error: errorCategories } = StateCategories;
+  const { product } = StateProduct;
+  const { categories } = StateCategories;
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import { Table, Button, ButtonToolbar, Container } from 'react-bootstrap';
 import sweetAlert from 'sweetalert2';
 import { ModalEdit } from './ModalEdit';
 import { ModalAdd } from './ModalAdd';
-import { Loading } from '../../../components/Loading';
 import { useModal } from '../../../hooks/useModal';
 import {
   deleteCategory as serviceDeleteCategory,
@@ -24,10 +25,8 @@ import { configDelete, configDeleted, configDeletedError } from '../../../utils/
 
 export const Category = () => {
   console.log('Category has been rendered');
-  const { dispatch, StateCategories, StateCategory } = useCategoryStore();
-
-  const { categories, loading: loadingCategories, error: errorCategories } = StateCategories;
-  const { category, loading: loadingCategory, error: errorCategory } = StateCategory;
+  const { dispatch, StateCategories } = useCategoryStore();
+  const { categories, loading: loadingCategories } = StateCategories;
   const [updateList, setUpdateList] = useState(false);
   // hooks to handle modal
   const modalAdd = useModal();
@@ -63,7 +62,6 @@ export const Category = () => {
       })
       .then((data) => {
         dispatch(getCategoriesSuccess(data.data));
-        console.log(loadingCategories);
       })
       .catch((error) => {
         dispatch(getCategoriesFail(error.message));
@@ -84,7 +82,6 @@ export const Category = () => {
           </Button>
         </div>
       </div>
-      {loadingCategories && <Loading />}
       <Table striped hover size="sm">
         <thead>
           <tr>
@@ -96,29 +93,33 @@ export const Category = () => {
         <tbody>
           {categories.map((category, index) => (
             <tr key={category._id}>
-              <th scope="row">{index + 1}</th>
-              <td className="text-center">{category.name}</td>
+              <th scope="row">{loadingCategories ? <Skeleton /> : index + 1}</th>
+              <td className="text-center">{loadingCategories ? <Skeleton /> : category.name}</td>
               <td>
-                <ButtonToolbar className="justify-content-end">
-                  <Button
-                    variant="danger"
-                    className="me-3"
-                    onClick={() => {
-                      handleDelete(category);
-                    }}
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    variant="primary"
-                    onClick={() => {
-                      dispatch(selectCategory(category));
-                      modalEdit.handleShow(category);
-                    }}
-                  >
-                    Edit
-                  </Button>
-                </ButtonToolbar>
+                {loadingCategories ? (
+                  <Skeleton />
+                ) : (
+                  <ButtonToolbar className="justify-content-end">
+                    <Button
+                      variant="danger"
+                      className="me-3"
+                      onClick={() => {
+                        handleDelete(category);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      variant="primary"
+                      onClick={() => {
+                        dispatch(selectCategory(category));
+                        modalEdit.handleShow(category);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  </ButtonToolbar>
+                )}
               </td>
             </tr>
           ))}

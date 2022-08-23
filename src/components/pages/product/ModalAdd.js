@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import sweetAlert from 'sweetalert2';
 import { configAddedError, configAdded } from '../../../utils/sl2/configs';
@@ -6,9 +6,9 @@ import { createProduct as serviceCreateProduct } from '../../../lib/api/services
 import { useCategoryStore, useProductStore } from '../../../store/index';
 import { addProduct, addProductFail, addProductSuccess } from '../../../store/actions/product/action';
 export const ModalAdd = ({ show, handleClose, updateList, setUpdateList }) => {
-  const { dispatch, StateProduct } = useProductStore();
+  const { dispatch } = useProductStore();
   const { StateCategories } = useCategoryStore();
-  const { categories, error: errorCategories } = StateCategories;
+  const { categories } = StateCategories;
 
   const handleSubmit = async (e) => {
     e.preventDefault();

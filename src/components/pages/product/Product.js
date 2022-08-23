@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import sweetAlert from 'sweetalert2';
 import { ModalEdit } from './ModalEdit';
 import { ModalAdd } from './ModalAdd';
@@ -9,7 +11,6 @@ import {
 } from '../../../lib/api/services/products';
 import { Table, Button, ButtonToolbar, Container } from 'react-bootstrap';
 import { StatsCard } from '../../StatsCard';
-import { Loading } from '../../../components/Loading';
 import { productTemplate } from '../../../utils/templateForm/templates';
 import { useProductStore } from '../../../store/index';
 import {
@@ -25,7 +26,7 @@ import { configDelete, configDeleted, configDeletedError } from '../../../utils/
 
 export const Product = () => {
   const { dispatch, StateProducts } = useProductStore();
-  const { products, loading: loadingProducts, error: errorProducts } = StateProducts;
+  const { products, loading: loadingProducts } = StateProducts;
   const [updateList, setUpdateList] = useState(false);
   const modalAdd = useModal();
   const modalEdit = useModal(productTemplate);
@@ -100,42 +101,49 @@ export const Product = () => {
           {products.map((product, index) => (
             <tr key={product._id}>
               <th className="align-middle" scope="row">
-                {index + 1}
+                {loadingProducts ? <Skeleton /> : index + 1}
               </th>
               <td>
-                <img src={`${process.env.REACT_APP_API_URL_PUBLIC}${product.image}`} width="100" />
+                {loadingProducts ? (
+                  <Skeleton />
+                ) : (
+                  <img src={`${process.env.REACT_APP_API_URL_PUBLIC}${product.image}`} alt="" width="100" />
+                )}
               </td>
-              <td className="align-middle">{product.name}</td>
-              <td className="align-middle ">{product.description}</td>
+              <td className="align-middle">{loadingProducts ? <Skeleton /> : product.name}</td>
+              <td className="align-middle ">{loadingProducts ? <Skeleton /> : product.description}</td>
 
-              <td className="align-middle  ">{product.category?.name}</td>
-              <td className="align-middle  ">{product.stock}</td>
-              <td className="align-middle ">{product.price}</td>
-
+              <td className="align-middle  ">{loadingProducts ? <Skeleton /> : product.category?.name}</td>
+              <td className="align-middle  ">{loadingProducts ? <Skeleton /> : product.stock}</td>
+              <td className="align-middle ">{loadingProducts ? <Skeleton /> : product.price}</td>
               <td className="align-middle">
-                <ButtonToolbar className="justify-content-center " style={{ height: '100%' }}>
-                  <Button
-                    className="m-1"
-                    variant="danger"
-                    style={{ width: '70px' }}
-                    onClick={() => {
-                      handleDelete(product);
-                    }}
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    className="m-1"
-                    variant="primary"
-                    style={{ width: '70px' }}
-                    onClick={() => {
-                      dispatch(selectProduct(product));
-                      modalEdit.handleShow(product);
-                    }}
-                  >
-                    Edit
-                  </Button>
-                </ButtonToolbar>
+                {loadingProducts ? (
+                  <Skeleton />
+                ) : (
+                  <ButtonToolbar className="justify-content-center " style={{ height: '100%' }}>
+                    <Button
+                      className="m-1"
+                      variant="danger"
+                      style={{ width: '70px' }}
+                      onClick={() => {
+                        handleDelete(product);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      className="m-1"
+                      variant="primary"
+                      style={{ width: '70px' }}
+                      onClick={() => {
+                        dispatch(selectProduct(product));
+                        modalEdit.handleShow(product);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  </ButtonToolbar>
+                )}
               </td>
             </tr>
           ))}
@@ -155,7 +163,6 @@ export const Product = () => {
         updateList={updateList}
         setUpdateList={setUpdateList}
       />
-      {loadingProducts && <Loading />}
     </Container>
   );
 };
