@@ -3,13 +3,7 @@ import React, { useEffect, useState } from 'react';
 import sweetAlert from 'sweetalert2';
 import { updateProduct } from '../../../lib/api/services/products';
 import { getCategories } from '../../../lib/api/services/categories';
-export const ModalEdit = ({
-  updateList,
-  setUpdateList,
-  dataModal,
-  handleCloseModal,
-  showModal,
-}) => {
+export const ModalEdit = ({ updateList, setUpdateList, dataModal, handleClose, show }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,14 +24,14 @@ export const ModalEdit = ({
       .then((response) => {
         if (response.status === 200) {
           setUpdateList(!updateList);
-          handleCloseModal();
+          handleClose();
         } else {
           sweetAlert.fire({
             title: 'Error',
             text: 'Something went wrong',
             icon: 'error',
             confirmButtonText: 'Ok',
-            heightAuto:false,
+            heightAuto: false,
           });
         }
       })
@@ -47,7 +41,7 @@ export const ModalEdit = ({
           text: 'Something went wrong',
           icon: 'error',
           confirmButtonText: 'Ok',
-          heightAuto:false,
+          heightAuto: false,
         });
       });
   };
@@ -61,7 +55,7 @@ export const ModalEdit = ({
   }, []);
 
   return (
-    <Modal show={showModal} onHide={handleCloseModal}>
+    <Modal show={show} onHide={handleClose}>
       <Modal.Header>
         <Modal.Title>Change Data</Modal.Title>
       </Modal.Header>
@@ -73,12 +67,7 @@ export const ModalEdit = ({
           </Form.Group>
           <Form.Group className="mb-1">
             <Form.Label>Description</Form.Label>
-            <Form.Control
-              type="text"
-              name="description"
-              placeholder={dataModal.description}
-              required
-            />
+            <Form.Control type="text" name="description" placeholder={dataModal.description} required />
           </Form.Group>
           <Form.Group className="mb-1">
             <Form.Label>Name Category</Form.Label>
@@ -108,7 +97,7 @@ export const ModalEdit = ({
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary" type="reset" onClick={handleCloseModal}>
+          <Button variant="secondary" type="reset" onClick={handleClose}>
             Cancel
           </Button>
           <Button variant="success" type="submit">

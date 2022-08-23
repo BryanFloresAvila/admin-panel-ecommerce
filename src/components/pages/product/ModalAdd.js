@@ -3,16 +3,11 @@ import { Button, Modal, Form } from 'react-bootstrap';
 import sweetAlert from 'sweetalert2';
 import { createProduct } from '../../../lib/api/services/products';
 import { getCategories } from '../../../lib/api/services/categories';
-export const ModalAdd = ({
-  showModalAdd,
-  handleCloseModalAdd,
-  updateList,
-  setUpdateList,
-}) => {
+export const ModalAdd = ({ show, handleClose, updateList, setUpdateList }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const handleSubmitAdd = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
       name: e.target[0].value,
@@ -27,17 +22,15 @@ export const ModalAdd = ({
         if (response.status === 200) {
           setUpdateList(!updateList);
           sweetAlert
-            .fire(
-              {
-                title:'Saved!',
-                text:`The register ${response.data.reference} has been saved correctly !`,
-                icon:'success',
-                heightAuto:false,
-              }
-            )
+            .fire({
+              title: 'Saved!',
+              text: `The register ${response.data.reference} has been saved correctly !`,
+              icon: 'success',
+              heightAuto: false,
+            })
             .then((response) => {
               if (response.isConfirmed) {
-                handleCloseModalAdd();
+                handleClose();
               }
             });
         } else {
@@ -45,7 +38,7 @@ export const ModalAdd = ({
             title: 'Error',
             text: 'Something went wrong',
             icon: 'error',
-            heightAuto:false,
+            heightAuto: false,
           });
         }
       })
@@ -55,7 +48,7 @@ export const ModalAdd = ({
           title: 'Error',
           text: 'Something went wrong',
           icon: 'error',
-          heightAuto:false,
+          heightAuto: false,
         });
       });
   };
@@ -69,11 +62,11 @@ export const ModalAdd = ({
   }, []);
 
   return (
-    <Modal show={showModalAdd} onHide={handleCloseModalAdd}>
+    <Modal show={show} onHide={handleClose}>
       <Modal.Header>
         <Modal.Title>Change Data</Modal.Title>
       </Modal.Header>
-      <Form onSubmit={handleSubmitAdd}>
+      <Form onSubmit={handleSubmit}>
         <Modal.Body>
           <Form.Group className="mb-1">
             <Form.Label>Name Product</Form.Label>
@@ -110,7 +103,7 @@ export const ModalAdd = ({
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary" type="reset" onClick={handleCloseModalAdd}>
+          <Button variant="secondary" type="reset" onClick={handleClose}>
             Cancel
           </Button>
           <Button variant="success" type="submit">

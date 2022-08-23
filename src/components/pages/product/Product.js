@@ -7,6 +7,7 @@ import { getProducts } from '../../../lib/api/services/products';
 import { Table, Button, ButtonToolbar, Container } from 'react-bootstrap';
 import { StatsCard } from '../../StatsCard';
 import { Loading } from '../../../components/Loading';
+import { productTemplate } from '../../../utils/templateForm/templates';
 import { deleteProduct } from '../../../lib/api/services/products';
 export const Product = () => {
   const [product, setProduct] = useState([]);
@@ -14,7 +15,7 @@ export const Product = () => {
   const [loading, setLoading] = useState(true);
   const [dataModal, setDataModal] = useState({});
   const modalAdd = useModal();
-  const modalEdit = useModal();
+  const modalEdit = useModal(productTemplate);
 
   const handleDelete = (product) => {
     sweetAlert
@@ -32,24 +33,20 @@ export const Product = () => {
         if (result.isConfirmed) {
           deleteProduct(product._id).then((response) => {
             if (response.status === 200) {
-              sweetAlert.fire(
-                {
-                  title:'Deleted!',
-                  text:`Registration successfully deleted ${product.name}!`,
-                  icon:'success',
-                  heightAuto:false,
-                }
-              );
+              sweetAlert.fire({
+                title: 'Deleted!',
+                text: `Registration successfully deleted ${product.name}!`,
+                icon: 'success',
+                heightAuto: false,
+              });
               setUpdateList(!updateList);
             } else {
-              sweetAlert.fire(
-                {
-                  title:'Error!',
-                  text:'There was a problem with deleting the record!',
-                  icon:'error',
-                  heightAuto:false,
-              }
-              );
+              sweetAlert.fire({
+                title: 'Error!',
+                text: 'There was a problem with deleting the record!',
+                icon: 'error',
+                heightAuto: false,
+              });
             }
           });
         }
@@ -73,7 +70,7 @@ export const Product = () => {
           <h2>Product List</h2>
         </div>
         <div className="col d-flex justify-content-end">
-          <Button className="d-block" variant="primary" onClick={modalAdd.handleShowModal}>
+          <Button className="d-block" variant="primary" onClick={modalAdd.handleShow}>
             Add product
           </Button>
         </div>
@@ -98,10 +95,7 @@ export const Product = () => {
                 {index + 1}
               </th>
               <td>
-                <img
-                  src={`${process.env.REACT_APP_API_URL_PUBLIC}${item.image}`}
-                  width="100"
-                />
+                <img src={`${process.env.REACT_APP_API_URL_PUBLIC}${item.image}`} width="100" />
               </td>
               <td className="align-middle">{item.name}</td>
               <td className="align-middle ">{item.description}</td>
@@ -111,10 +105,7 @@ export const Product = () => {
               <td className="align-middle ">{item.price}</td>
 
               <td className="align-middle">
-                <ButtonToolbar
-                  className="justify-content-center "
-                  style={{ height: '100%' }}
-                >
+                <ButtonToolbar className="justify-content-center " style={{ height: '100%' }}>
                   <Button
                     className="m-1"
                     variant="danger"
@@ -131,7 +122,7 @@ export const Product = () => {
                     style={{ width: '70px' }}
                     onClick={() => {
                       setDataModal(item);
-                      modalEdit.handleShowModal();
+                      modalEdit.handleShow();
                     }}
                   >
                     Edit
@@ -143,15 +134,15 @@ export const Product = () => {
         </tbody>
       </Table>
       <ModalEdit
-        showModal={modalEdit.showModal}
-        handleCloseModal={modalEdit.handleCloseModal}
+        show={modalEdit.show}
+        handleClose={modalEdit.handleClose}
         dataModal={dataModal}
         updateList={modalEdit.updateList}
         setUpdateList={setUpdateList}
       />
       <ModalAdd
-        showModalAdd={modalAdd.showModal}
-        handleCloseModalAdd={modalAdd.handleCloseModal}
+        show={modalAdd.show}
+        handleClose={modalAdd.handleClose}
         updateList={updateList}
         setUpdateList={setUpdateList}
       />
